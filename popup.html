@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Zen Recall</title>
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100 p-4">
+	<h1 class="text-xl font-bold mb-4">Zen Recall</h1>
+	<ul id="tab-list" class="space-y-4"></ul>
+	<div class="mt-4 space-x-2">
+		<button id="clear-tabs" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+			Clear All Stored Tabs
+		</button>
+		<button id="open-tabs" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+			Restore All Tabs
+		</button>
+	</div>
+	<script src="popup.js"></script>
+</body>
+
+</html>

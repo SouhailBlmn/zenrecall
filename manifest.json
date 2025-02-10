@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Zen Recall",
+  "version": "1.1",
+  "description": "An extension that acts as a temp fix for the ongoing Zen browser history bug",
+  "permissions": ["tabs", "storage"],
+  "background": {
+    "scripts": ["recall.js"]
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+ }
+}
