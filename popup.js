@@ -54,25 +54,24 @@ function deleteTab(tabId, windowId) {
 	});
 }
 
+
 // Function to restore all stored tabs and windows
 function restoreTabs() {
 	browser.storage.local.get("openedTabs").then((data) => {
 		const openedTabs = data.openedTabs || {};
-		Object.entries(openedTabs).forEach(([windowId, tabs]) => {
-			browser.windows.create().then((newWindow) => {
-				tabs.forEach((tab, index) => {
-					if (index === 0) {
-						// Update the first tab in the new window
-						browser.tabs.update(newWindow.tabs[0].id, { url: tab.url });
-					} else {
-						// Create additional tabs
-						browser.tabs.create({ url: tab.url, windowId: newWindow.id });
-					}
-				});
+
+		Object.values(openedTabs).forEach((tabs) => {
+			// Create urls array for the window
+			const urls = tabs.map((tab) => tab.url);
+
+			// Create new window with all tabs at once
+			browser.windows.create({
+				url: urls
 			});
 		});
 	});
 }
+
 
 // Add event listeners to the buttons
 document.getElementById("clear-tabs").addEventListener("click", clearAllTabs);
