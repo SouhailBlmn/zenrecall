@@ -73,6 +73,33 @@ function restoreTabs() {
 }
 
 
+function storeCurrentOpenedTabs() {
+	browser.tabs.query({}).then((tabs) => {
+		const openedTabs = {};
+
+		tabs.forEach((tab) => {
+			const windowId = tab.windowId;
+			if (!openedTabs[windowId]) {
+				openedTabs[windowId] = [];
+			}
+			openedTabs[windowId].push({
+				id: tab.id,
+				url: tab.url || "New Tab",
+				title: tab.title || "Untitled",
+				openedAt: new Date().toISOString(),
+			});
+		});
+
+		browser.storage.local.set({ openedTabs }).then(() => {
+			displayTabs(); // Refresh the displayed list
+		});
+	});
+}
+
+// Add event listener for the new button
+document.getElementById("store-tabs").addEventListener("click", storeCurrentOpenedTabs);
+
+
 // Add event listeners to the buttons
 document.getElementById("clear-tabs").addEventListener("click", clearAllTabs);
 document.getElementById("open-tabs").addEventListener("click", restoreTabs);
