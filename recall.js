@@ -4,6 +4,26 @@ browser.runtime.onInstalled.addListener(() => {
 	browser.storage.local.set({ openedTabs: {} });
 });
 
+// Clear openedTabs every hour
+setInterval(() => {
+	browser.tabs.query({}).then((tabs) => {
+		const openedTabs = {};
+		tabs.forEach((tab) => {
+			const windowId = tab.windowId;
+			if (!openedTabs[windowId]) {
+				openedTabs[windowId] = [];
+			}
+			openedTabs[windowId].push({
+				id: tab.id,
+				url: tab.url || "New Tab",
+				title: tab.title || "Untitled",
+				openedAt: new Date().toISOString(),
+			});
+		});
+		browser.storage.local.set({ openedTabs });
+	});
+}, 3600000);
+
 // Listen for when a tab is created (opened)
 browser.tabs.onCreated.addListener((tab) => {
 	browser.storage.local.get("openedTabs").then((data) => {
