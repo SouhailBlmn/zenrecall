@@ -92,3 +92,15 @@ browser.storage.onChanged.addListener((changes) => {
 		console.log("Updated openedTabs:", changes.openedTabs.newValue);
 	}
 });
+
+
+// Listen for when a window is closed
+browser.windows.onRemoved.addListener((windowId) => {
+	browser.storage.local.get("openedTabs").then((data) => {
+		const openedTabs = data.openedTabs || {};
+		if (openedTabs[windowId]) {
+			delete openedTabs[windowId]; // Remove the entire window entry
+			browser.storage.local.set({ openedTabs });
+		}
+	});
+});
