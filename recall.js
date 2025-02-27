@@ -99,8 +99,10 @@ browser.windows.onRemoved.addListener((windowId) => {
 	browser.storage.local.get("openedTabs").then((data) => {
 		const openedTabs = data.openedTabs || {};
 		if (openedTabs[windowId]) {
-			delete openedTabs[windowId]; // Remove the entire window entry
+			// Only remove this window's entry if it exists
+			delete openedTabs[windowId];
 			browser.storage.local.set({ openedTabs });
 		}
+		// Don't touch other windows' history
 	});
 });
