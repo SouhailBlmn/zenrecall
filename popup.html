@@ -5,22 +5,32 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Zen Recall</title>
-	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 
-<body class="bg-gray-100 p-4">
-	<h1 class="text-xl font-bold mb-4">Zen Recall</h1>
-	<ul id="tab-list" class="space-y-4"></ul>
-	<div class="mt-4 space-x-2">
-		<button id="clear-tabs" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-			Clear All Stored Tabs
-		</button>
-		<button id="open-tabs" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-			Restore All Tabs
-		</button>
-		<button id="store-tabs" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-			Store Current Opened Tabs
-		</button>
+<body class="bg-gray-50 p-6">
+	<div class="max-w-md mx-auto">
+		<div class="flex items-center gap-3 mb-6">
+			<h1 class="text-2xl font-bold text-gray-900">Zen Recall</h1>
+			<div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+		</div>
+
+		<ul id="tab-list" class="space-y-3"></ul>
+
+		<div class="mt-6 space-y-3">
+			<button id="store-tabs"
+				class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200">
+				Store Current Tabs
+			</button>
+			<button id="open-tabs"
+				class="w-full bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200">
+				Restore All Tabs
+			</button>
+			<button id="clear-tabs"
+				class="w-full text-red-500 px-6 py-3 rounded-lg hover:bg-red-50 transition-all duration-200">
+				Clear All Stored Tabs
+			</button>
+		</div>
 	</div>
 	<script src="popup.js"></script>
 </body>
