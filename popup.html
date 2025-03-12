@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Zen Recall</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Zen Recall</title>
-	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/dist/tailwind.min.css" rel="stylesheet" />
-</head>
+  <body class="bg-gray-50 p-6">
+    <div class="max-w-md mx-auto">
+      <div class="flex items-center gap-3 mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Zen Recall</h1>
+        <div
+          class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+        ></div>
+      </div>
 
-<body class="bg-gray-50 p-6">
-	<div class="max-w-md mx-auto">
-		<div class="flex items-center gap-3 mb-6">
-			<h1 class="text-2xl font-bold text-gray-900">Zen Recall</h1>
-			<div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-		</div>
+      <ul
+        id="tab-list"
+        class="space-y-3"
+      ></ul>
 
-		<ul id="tab-list" class="space-y-3"></ul>
-
-		<div class="mt-6 space-y-3">
-			<button id="store-tabs"
-				class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200">
-				Store Current Tabs
-			</button>
-			<button id="open-tabs"
-				class="w-full bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200">
-				Restore All Tabs
-			</button>
-			<button id="clear-tabs"
-				class="w-full text-red-500 px-6 py-3 rounded-lg hover:bg-red-50 transition-all duration-200">
-				Clear All Stored Tabs
-			</button>
-		</div>
-	</div>
-	<script src="popup.js"></script>
-</body>
-
+      <div class="mt-6 space-y-3">
+        <button
+          id="store-tabs"
+          class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+        >
+          Store Current Tabs
+        </button>
+        <button
+          id="open-tabs"
+          class="w-full bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200"
+        >
+          Restore All Tabs
+        </button>
+        <button
+          id="clear-tabs"
+          class="w-full text-red-500 px-6 py-3 rounded-lg hover:bg-red-50 transition-all duration-200"
+        >
+          Clear All Stored Tabs
+        </button>
+      </div>
+    </div>
+    <script src="db.js"></script>
+    <script src="popup.js"></script>
+  </body>
 </html>

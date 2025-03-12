@@ -1,110 +1,132 @@
 
 // Function to display the current list of stored tabs
-function displayTabs() {
-	const tabList = document.getElementById("tab-list");
-	tabList.innerHTML = ""; // Clear the list
+async function displayTabs() {
+	try {
+		await tabsDB.init();
+		const tabList = document.getElementById("tab-list");
+		tabList.innerHTML = ""; // Clear the list
 
-	// Get the stored tabs from browser storage
-	browser.storage.local.get("openedTabs").then((data) => {
-		const openedTabs = data.openedTabs || {};
+		const openedTabs = await tabsDB.getTabs();
 		if (Object.keys(openedTabs).length === 0) {
 			tabList.innerHTML = "<li>No tabs stored yet.</li>";
 		} else {
 			Object.entries(openedTabs).forEach(([windowId, tabs]) => {
 				const windowHeader = document.createElement("h2");
 				windowHeader.textContent = `Window ${windowId}`;
+				windowHeader.className = "text-lg font-semibold mt-4 mb-2";
 				tabList.appendChild(windowHeader);
 
 				tabs.forEach((tab) => {
 					const listItem = document.createElement("div");
-					listItem.className = "tab-item";
+					listItem.className = "tab-item flex justify-between items-center p-2 hover:bg-gray-100 rounded";
 					listItem.innerHTML = `
-            <span>${tab.title} - ${tab.url}</span>
-            <span class="delete-icon" data-id="${tab.id}" data-window-id="${windowId}">🗑️</span>
-          `;
+						<span class="truncate flex-1">${tab.title}</span>
+						<span class="delete-icon cursor-pointer ml-2" data-id="${tab.id}" data-window-id="${windowId}">🗑️</span>
+					`;
 					tabList.appendChild(listItem);
 				});
 			});
 		}
-	});
+	} catch (error) {
+		console.error('Error displaying tabs:', error);
+	}
 }
 
 // Function to clear all stored tabs
-function clearAllTabs() {
-	browser.storage.local.set({ openedTabs: {} }).then(() => {
-		displayTabs(); // Refresh the displayed list
-	});
+async function clearAllTabs() {
+	try {
+		await tabsDB.init();
+		await tabsDB.clearTabs();
+		await displayTabs();
+	} catch (error) {
+		console.error('Error clearing tabs:', error);
+	}
 }
 
 // Function to delete a specific tab
-function deleteTab(tabId, windowId) {
-	browser.storage.local.get("openedTabs").then((data) => {
-		const openedTabs = data.openedTabs || {};
+async function deleteTab(tabId, windowId) {
+	try {
+		await tabsDB.init();
+		const openedTabs = await tabsDB.getTabs();
+		
 		if (openedTabs[windowId]) {
 			openedTabs[windowId] = openedTabs[windowId].filter((tab) => tab.id !== parseInt(tabId, 10));
 
 			if (openedTabs[windowId].length === 0) {
 				delete openedTabs[windowId];
 			}
+			await tabsDB.setTabs(openedTabs);
+			await displayTabs();
 		}
-
-		browser.storage.local.set({ openedTabs }).then(() => {
-			displayTabs(); // Refresh the displayed list
-		});
-	});
+	} catch (error) {
+		console.error('Error deleting tab:', error);
+	}
 }
-
 
 // Function to restore all stored tabs and windows
-function restoreTabs() {
-	browser.storage.local.get("openedTabs").then((data) => {
-		const openedTabs = data.openedTabs || {};
+async function restoreTabs() {
+	try {
+		await tabsDB.init();
+		const openedTabs = await tabsDB.getTabs();
+		console.log('Stored tabs to restore:', openedTabs); // Debug log
 
-		Object.values(openedTabs).forEach((tabs) => {
-			// Create urls array for the window
-			const urls = tabs.map((tab) => tab.url);
+		// Convert to array of promises
+		const windowPromises = Object.entries(openedTabs).map(async ([windowId, tabs]) => {
+			console.log(`Restoring window ${windowId} with tabs:`, tabs); // Debug log
+			
+			const urls = tabs
+				.map(tab => tab.url)
+				.filter(url => url && url !== "about:blank");
+			
+			console.log(`Filtered URLs for window ${windowId}:`, urls); // Debug log
 
-			// Create new window with all tabs at once
-			browser.windows.create({
-				url: urls
-			});
+			if (urls.length > 0) {
+				return browser.windows.create({ url: urls });
+			}
 		});
-	});
+
+		// Wait for all windows to be created
+		await Promise.all(windowPromises);
+		console.log('All windows restored'); // Debug log
+
+	} catch (error) {
+		console.error('Error restoring tabs:', error);
+	}
 }
 
-
-function storeCurrentOpenedTabs() {
-	browser.tabs.query({}).then((tabs) => {
+async function storeCurrentOpenedTabs() {
+	try {
+		await tabsDB.init();
+		const tabs = await browser.tabs.query({});
 		const openedTabs = {};
 
 		tabs.forEach((tab) => {
-			const windowId = tab.windowId;
+			const windowId = tab.windowId.toString();
 			if (!openedTabs[windowId]) {
 				openedTabs[windowId] = [];
 			}
-			openedTabs[windowId].push({
-				id: tab.id,
-				url: tab.url || "New Tab",
-				title: tab.title || "Untitled",
-				openedAt: new Date().toISOString(),
-			});
+			if (tab.url !== "about:blank") {
+				openedTabs[windowId].push({
+					id: tab.id,
+					url: tab.url,
+					title: tab.title || "Untitled",
+					openedAt: new Date().toISOString(),
+				});
+			}
 		});
 
-		browser.storage.local.set({ openedTabs }).then(() => {
-			displayTabs(); // Refresh the displayed list
-		});
-	});
+		await tabsDB.setTabs(openedTabs);
+		await displayTabs();
+	} catch (error) {
+		console.error('Error storing tabs:', error);
+	}
 }
 
-// Add event listener for the new button
+// Add event listeners
 document.getElementById("store-tabs").addEventListener("click", storeCurrentOpenedTabs);
-
-
-// Add event listeners to the buttons
 document.getElementById("clear-tabs").addEventListener("click", clearAllTabs);
 document.getElementById("open-tabs").addEventListener("click", restoreTabs);
 
-// Add event listener for delete icons
 document.getElementById("tab-list").addEventListener("click", (event) => {
 	if (event.target.classList.contains("delete-icon")) {
 		const tabId = event.target.getAttribute("data-id");
@@ -113,5 +135,4 @@ document.getElementById("tab-list").addEventListener("click", (event) => {
 	}
 });
 
-// Display the current list of tabs when the popup is opened
 document.addEventListener("DOMContentLoaded", displayTabs);
