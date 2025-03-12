@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,38 +12,147 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <style>
+      /* Custom styles for the extension */
+      body {
+        background-color: #121212; /* Black background */
+        color: #ffffff; /* White text */
+        font-family: "Inter", sans-serif;
+      }
+
+      .gradient-header {
+        background: linear-gradient(
+          to right,
+          #f97316,
+          #f59e0b
+        ); /* Modern orange gradient */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .button-primary {
+        background-color: #f97316; /* Orange */
+        color: #ffffff;
+        border: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .button-primary:hover {
+        background-color: #ea580c; /* Darker orange */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .button-secondary {
+        background-color: #1e1e1e; /* Dark gray */
+        color: #ffffff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #333333;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .button-secondary:hover {
+        background-color: #2a2a2a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .button-danger {
+        background-color: transparent;
+        color: #f87171; /* Soft red */
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #f87171;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .button-danger:hover {
+        background-color: #2a2a2a;
+        color: #fca5a5; /* Lighter red */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .tab-item {
+        background-color: #1e1e1e; /* Dark gray */
+        color: #ffffff;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .tab-item:hover {
+        background-color: #2a2a2a;
+      }
+
+      .delete-icon {
+        color: #f87171; /* Soft red */
+        cursor: pointer;
+        transition: color 0.2s ease-in-out;
+      }
+
+      .delete-icon:hover {
+        color: #fca5a5; /* Lighter red */
+      }
+
+      .icon-placeholder {
+        width: 24px;
+        height: 24px;
+        background-color: #2a2a2a;
+        border-radius: 50%;
+        display: inline-block;
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-50 p-6">
-    <div class="max-w-md mx-auto">
+  <body class="p-4">
+    <div class="max-w-sm mx-auto">
+      <!-- Header -->
       <div class="flex items-center gap-3 mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Zen Recall</h1>
-        <div
-          class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-        ></div>
+        <div class="icon-placeholder">
+		<img src="icons/icon48.png" alt="ZenRecall Icon">
+	</div>
+        <h1 class="text-2xl font-bold gradient-header">Zen Recall</h1>
       </div>
 
+      <!-- Tab List -->
       <ul
         id="tab-list"
         class="space-y-3"
       ></ul>
 
+      <!-- Buttons -->
       <div class="mt-6 space-y-3">
         <button
           id="store-tabs"
-          class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+          class="w-full button-primary text-sm"
         >
           Store Current Tabs
         </button>
         <button
           id="open-tabs"
-          class="w-full bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-200"
+          class="w-full button-secondary text-sm"
         >
           Restore All Tabs
         </button>
         <button
           id="clear-tabs"
-          class="w-full text-red-500 px-6 py-3 rounded-lg hover:bg-red-50 transition-all duration-200"
+          class="w-full button-danger text-sm"
         >
           Clear All Stored Tabs
         </button>
