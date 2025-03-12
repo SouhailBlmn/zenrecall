@@ -1,13 +1,35 @@
 {
   "manifest_version": 2,
   "name": "Zen Recall",
-  "version": "1.4.2",
+  "version": "3.7",
   "description": "An extension that acts as a temp fix for the ongoing Zen browser history bug",
-  "permissions": ["tabs", "storage"],
-  "background": {
-    "scripts": ["recall.js"]
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "browser_action": {
-    "default_popup": "popup.html"
- }
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": ["tabs", "storage", "unlimitedStorage"],
+  "background": {
+    "scripts": ["db.js", "recall.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "INSERT_ID_HERE"
+    }
+  },
+  "options": {
+    "storage": {
+      "managed_schema": "schema.json"
+    }
+  }
 }
